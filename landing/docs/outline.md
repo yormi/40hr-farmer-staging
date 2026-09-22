@@ -968,6 +968,12 @@ Ordering: 1 → 2 → 3. Reassurance before the form. No disclosures.
 
 Submission path: client-side `fetch` POST to `https://api.hsforms.com/submissions/v3/integration/submit/5156324/7f28cb26-…` with `Content-Type: application/json` and a `{fields: [...], context: {...}}` body. On success the form panel is replaced with a thank-you message and a GA4 `waitlist_signup` event fires.
 
+**Drift note (2026-09-22, program goes free — Stripe removed):** The program becomes free on 2026-10-01, so the paid subscribe card is retired. Changes to the `#join` card: big numeral *"$40"* + *"USD / month"* → *"Free"* alone; caption *"Month to month. Leave anytime."* → *"No cost to join. Leave anytime."*; button *"Subscribe"* → *"Join for free"*; top-nav link *"Pricing"* → *"Free"* (desktop + mobile). An email field was added above the consent checkbox (label *"Your email"*, placeholder *"you@yourfarm.com"*), since the Stripe card captured no address and therefore created no contact anywhere.
+
+Terms modal, final paragraph relocked: *"If something goes wrong and we're held responsible, even if it's our fault, the most you can get back is what you paid us."* → *"The program is free, so there is nothing to refund. If something goes wrong and we're held responsible, even if it's our fault, our responsibility is limited as far as the law allows."* The original capped liability at the amount paid, which is zero once the program is free. **Pending legal review** (see `legal/program-terms.md`).
+
+**Submission path (replaces the HubSpot Forms API path above):** on click the page validates the address, requires the consent box, then posts `email` + `source=landing` to the Airtable intake webhook (`hooks.airtable.com/workflows/v1/genericWebhook/app6sjIN2wnjWRMsh/…`) and sends the farmer straight to the Circle community invite. The webhook returns no CORS headers and rejects any content type other than `application/json` or `application/x-www-form-urlencoded`, so the request goes out form-encoded via `navigator.sendBeacon` (queued by the browser, survives the navigation), with a `keepalive` no-cors `fetch` as fallback. Neither path can read the response, so a failed post is silent by design. GA4 events renamed `subscribe_click` → `join_click` and `subscribe_agree` → `join_agree`. HubSpot is no longer in the landing-page path.
+
 ---
 
 ## Final CTA (absorbed into Committer sub 2 above)

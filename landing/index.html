@@ -162,7 +162,7 @@
         <div class="hidden md:flex items-center gap-8">
           <a href="#program" class="nav-link text-sm text-farm-text transition-colors">The program</a>
           <a href="#who" class="nav-link text-sm text-farm-text transition-colors">Who it's for</a>
-          <a href="#join" class="nav-link text-sm text-farm-text transition-colors">Pricing</a>
+          <a href="#join" class="nav-link text-sm text-farm-text transition-colors">Free</a>
           <a href="#join" class="inline-flex items-center px-5 py-2.5 bg-farm-green text-white text-sm font-semibold rounded-full hover:bg-farm-dark transition-colors shadow-sm">
             Join the program
           </a>
@@ -178,7 +178,7 @@
       <div class="px-4 py-4 space-y-3">
         <a href="#program" class="nav-link block text-base text-farm-text py-2">The program</a>
         <a href="#who" class="nav-link block text-base text-farm-text py-2">Who it's for</a>
-        <a href="#join" class="nav-link block text-base text-farm-text py-2">Pricing</a>
+        <a href="#join" class="nav-link block text-base text-farm-text py-2">Free</a>
         <a href="#join" class="block text-center px-5 py-2.5 bg-farm-green text-white text-sm font-semibold rounded-full hover:bg-farm-dark transition-colors">
           Join the program
         </a>
@@ -1256,11 +1256,13 @@
       </div>
     </section>
 
-    <!-- ========== JOIN THE PROGRAM (Committer sub 2) — subscribe card ==========
-         Stacked single-column: H2 → centered subscribe card. The card carries the
-         price ($40/month), what the program includes, and the Subscribe button that
-         links straight to the Stripe payment link. Below the button, two promo-code
-         paths for existing Growing for Market members and Orisha customers.
+    <!-- ========== JOIN THE PROGRAM (Committer sub 2) — join card ==========
+         Stacked single-column: H2 → centered join card. The card carries the
+         price (free), what the program includes, an email field, and the Join
+         button. On submit the address is posted to the Airtable intake webhook
+         and the farmer is sent straight on to the Circle community. Below the
+         button, two promo-code paths for existing Growing for Market members
+         and Orisha customers.
          Background: farm photo with deep farm-dark tint (orisha.io bottom-CTA pattern),
          the same visual bookend as the hero. Card stays bg-white as a contrast island. -->
     <section id="join" class="relative bg-farm-dark bg-cover bg-center py-20 md:py-28"
@@ -1283,16 +1285,15 @@
           <div class="max-w-lg mx-auto mt-12 md:mt-16">
             <div class="bg-white rounded-card p-8 md:p-10 border border-farm-mid/15">
 
-              <!-- Default view: price, what you get, subscribe button, promo paths -->
+              <!-- Default view: price, what you get, email, join button, promo paths -->
               <div id="subscribe-main">
 
               <!-- Price -->
               <div class="flex items-baseline gap-2">
-                <span class="font-heading text-6xl md:text-7xl text-farm-dark font-medium leading-none">$40</span>
-                <span class="font-accent text-farm-muted uppercase tracking-wider text-xs">USD / month</span>
+                <span class="font-heading text-6xl md:text-7xl text-farm-dark font-medium leading-none">Free</span>
               </div>
               <p class="text-base md:text-lg text-farm-text leading-relaxed mt-4">
-                Month to month. Leave anytime.
+                No cost to join. Leave anytime.
               </p>
 
               <!-- What the program includes -->
@@ -1332,6 +1333,20 @@
                 </li>
               </ul>
 
+              <!-- Email: where we send the program details. Posted to the
+                   Airtable intake webhook on submit. -->
+              <div class="mt-8">
+                <label for="join-email" class="font-accent text-farm-mid font-semibold uppercase tracking-wider text-xs block mb-4">
+                  Your email
+                </label>
+                <input type="email" id="join-email" name="email" required autocomplete="email"
+                       placeholder="you@yourfarm.com"
+                       class="w-full px-5 py-4 text-base md:text-lg text-farm-text bg-white border border-farm-mid/30 rounded-2xl placeholder:text-farm-muted focus:outline-none focus:border-farm-green focus:ring-2 focus:ring-farm-green/30">
+                <p id="email-error" class="hidden mt-3 text-sm text-red-600 font-semibold" role="alert">
+                  Please enter a valid email address.
+                </p>
+              </div>
+
               <!-- Consent: a single checkbox. The "terms and conditions" link
                    opens the full text in a modal (#terms-modal, near the end of
                    the page). The link sits OUTSIDE the <label> on purpose, so
@@ -1353,10 +1368,11 @@
                 </p>
               </div>
 
-              <!-- Subscribe button: requires consent, then redirects to Stripe -->
-              <button type="button" id="subscribe-submit"
+              <!-- Join button: requires a valid email and consent, posts to the
+                   intake webhook, then redirects to Circle -->
+              <button type="button" id="join-submit"
                  class="w-full inline-flex items-center justify-center px-8 py-4 bg-farm-green text-white text-lg font-semibold rounded-full hover:bg-farm-dark transition-colors shadow-sm mt-8">
-                Subscribe &rarr;
+                Join for free &rarr;
               </button>
 
               <!-- Promo-code paths for existing members — HIDDEN from clients
@@ -1439,7 +1455,7 @@
           What works on one farm may not work on yours. Before you try any idea from the program, it's on you to make sure it fits your farm, your climate, and your local rules. You join at your own risk.
         </p>
         <p>
-          If something goes wrong and we're held responsible, even if it's our fault, the most you can get back is what you paid us.
+          The program is free, so there is nothing to refund. If something goes wrong and we're held responsible, even if it's our fault, our responsibility is limited as far as the law allows.
         </p>
       </div>
     </div>
@@ -1462,7 +1478,7 @@
     // Only 3 sections have nav links, so the page is split into zones by their
     // anchors. No link is active until #program is reached; then "The program"
     // stays active down to #who, "Who it's for" from #who to #join (covering
-    // #team), "Pricing" from #join to the bottom. A link activates once its
+    // #team), "Free" from #join to the bottom. A link activates once its
     // section's top reaches just under the nav.
     const navAnchorIds = ['program', 'who', 'join'];
     const navLinks = document.querySelectorAll('.nav-link');
@@ -1528,37 +1544,85 @@
       });
     });
 
-    // --- Subscribe flow: require terms consent, then redirect to Stripe ---
+    // --- Join flow: require a valid email and terms consent, post the address
+    //     to the Airtable intake webhook, then send the farmer to Circle ---
     (function() {
-      var STRIPE_URL = 'https://buy.stripe.com/8x24gz0kJ6Au0Rb4GV4Ja0u';
-      var submit   = document.getElementById('subscribe-submit');
-      var checkbox = document.getElementById('agree-terms');
-      var error    = document.getElementById('agree-error');
+      var WEBHOOK_URL = 'https://hooks.airtable.com/workflows/v1/genericWebhook/app6sjIN2wnjWRMsh/wflFxy0nWKO4ruUh2/wtrhnTby8YXw8V7sC';
+      var CIRCLE_URL  = 'https://40hr-farmers.circle.so/join?invitation_token=dc1d801beed6eb425ff2b522d2acfb19f86d0a78-b04d646f-2079-45c2-8f77-4f184d04d12a';
+      var submit     = document.getElementById('join-submit');
+      var emailInput = document.getElementById('join-email');
+      var emailError = document.getElementById('email-error');
+      var checkbox   = document.getElementById('agree-terms');
+      var error      = document.getElementById('agree-error');
+
+      function validEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      }
 
       if (submit) {
         submit.addEventListener('click', function() {
-          gtag('event', 'subscribe_click', {
+          gtag('event', 'join_click', {
             event_category: 'engagement',
             link_text: this.textContent.trim()
           });
-          // Block checkout until the terms box is checked; surface the error.
+
+          // Block on a missing or malformed address; surface the error.
+          var email = emailInput ? emailInput.value.trim() : '';
+          if (!validEmail(email)) {
+            if (emailError) emailError.classList.remove('hidden');
+            if (emailInput) emailInput.focus();
+            return;
+          }
+          if (emailError) emailError.classList.add('hidden');
+
+          // Block until the terms box is checked; surface the error.
           if (!checkbox || !checkbox.checked) {
             if (error) error.classList.remove('hidden');
             if (checkbox) checkbox.focus();
             return;
           }
           if (error) error.classList.add('hidden');
-          gtag('event', 'subscribe_agree', {
+
+          gtag('event', 'join_agree', {
             event_category: 'engagement'
           });
-          window.open(STRIPE_URL, '_blank', 'noopener,noreferrer');
+
+          // Post the address, then leave for Circle. The webhook returns no CORS
+          // headers, so the response is unreadable either way. Form encoding keeps
+          // this a simple request, which skips the preflight the webhook rejects.
+          // sendBeacon is queued by the browser and survives the navigation below;
+          // keepalive fetch is the fallback where sendBeacon is unavailable.
+          var body = new URLSearchParams({ email: email, source: 'landing' });
+          var queued = false;
+          try {
+            queued = !!(navigator.sendBeacon && navigator.sendBeacon(WEBHOOK_URL, body));
+          } catch (e) {
+            queued = false;
+          }
+          if (!queued) {
+            try {
+              fetch(WEBHOOK_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                keepalive: true,
+                body: body
+              }).catch(function() {});
+            } catch (e) {}
+          }
+
+          window.location.href = CIRCLE_URL;
         });
       }
 
-      // Clear the error the moment they check the box.
+      // Clear each error the moment the farmer fixes it.
       if (checkbox) {
         checkbox.addEventListener('change', function() {
           if (this.checked && error) error.classList.add('hidden');
+        });
+      }
+      if (emailInput) {
+        emailInput.addEventListener('input', function() {
+          if (emailError && validEmail(this.value.trim())) emailError.classList.add('hidden');
         });
       }
     })();
