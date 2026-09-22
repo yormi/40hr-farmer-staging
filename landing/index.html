@@ -162,7 +162,6 @@
         <div class="hidden md:flex items-center gap-8">
           <a href="#program" class="nav-link text-sm text-farm-text transition-colors">The program</a>
           <a href="#who" class="nav-link text-sm text-farm-text transition-colors">Who it's for</a>
-          <a href="#join" class="nav-link text-sm text-farm-text transition-colors">Free</a>
           <a href="#join" class="inline-flex items-center px-5 py-2.5 bg-farm-green text-white text-sm font-semibold rounded-full hover:bg-farm-dark transition-colors shadow-sm">
             Join the program
           </a>
@@ -178,7 +177,6 @@
       <div class="px-4 py-4 space-y-3">
         <a href="#program" class="nav-link block text-base text-farm-text py-2">The program</a>
         <a href="#who" class="nav-link block text-base text-farm-text py-2">Who it's for</a>
-        <a href="#join" class="nav-link block text-base text-farm-text py-2">Free</a>
         <a href="#join" class="block text-center px-5 py-2.5 bg-farm-green text-white text-sm font-semibold rounded-full hover:bg-farm-dark transition-colors">
           Join the program
         </a>
@@ -1475,11 +1473,13 @@
       }
     }
     // --- Scroll-spy: highlight the nav link for the section in view ---
-    // Only 3 sections have nav links, so the page is split into zones by their
+    // Only 2 sections have nav links, so the page is split into zones by their
     // anchors. No link is active until #program is reached; then "The program"
     // stays active down to #who, "Who it's for" from #who to #join (covering
-    // #team), "Free" from #join to the bottom. A link activates once its
-    // section's top reaches just under the nav.
+    // #team). #join is kept in the list below with no link of its own, so that
+    // reaching it clears the highlight rather than leaving "Who it's for" stuck
+    // active to the bottom. A link activates once its section's top reaches
+    // just under the nav.
     const navAnchorIds = ['program', 'who', 'join'];
     const navLinks = document.querySelectorAll('.nav-link');
     function updateActiveLink() {
