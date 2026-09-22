@@ -1548,7 +1548,14 @@
     //     to the Airtable intake webhook, then send the farmer to Circle ---
     (function() {
       var WEBHOOK_URL = 'https://hooks.airtable.com/workflows/v1/genericWebhook/app6sjIN2wnjWRMsh/wflFxy0nWKO4ruUh2/wtrhnTby8YXw8V7sC';
-      var CIRCLE_URL  = 'https://40hr-farmers.circle.so/join?invitation_token=dc1d801beed6eb425ff2b522d2acfb19f86d0a78-b04d646f-2079-45c2-8f77-4f184d04d12a';
+      // Circle's own sign-up form, rather than the /join redirect, so the address
+      // can be carried over. Circle reads a plain `email` param (it ignores the
+      // Rails-shaped `user[email]`) and, when it is present, skips its first
+      // screen and lands the farmer straight on the full form with the address
+      // already filled. Name and password are still theirs to enter.
+      var CIRCLE_BASE = 'https://login.circle.so/sign_up'
+                      + '?request_host=40hr-farmers.circle.so'
+                      + '&user%5Binvitation_token%5D=dc1d801beed6eb425ff2b522d2acfb19f86d0a78-b04d646f-2079-45c2-8f77-4f184d04d12a';
       var submit     = document.getElementById('join-submit');
       var emailInput = document.getElementById('join-email');
       var emailError = document.getElementById('email-error');
@@ -1610,7 +1617,7 @@
             } catch (e) {}
           }
 
-          window.location.href = CIRCLE_URL;
+          window.location.href = CIRCLE_BASE + '&email=' + encodeURIComponent(email);
         });
       }
 
